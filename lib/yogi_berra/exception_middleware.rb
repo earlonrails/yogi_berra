@@ -7,10 +7,12 @@ module YogiBerra
 
     def call(env)
       begin
+        path_parameters = env['action_controller.request.path_parameters'] || {}
+        query_hash      = env['rack.request.query_hash'] || {}
         response = dup._call(env)
         environment = {
           :session => env['rack.session'],
-          :params => env['action_controller.request.path_parameters'].merge(env['rack.request.query_hash']),
+          :params => path_parameters.merge(query_hash),
           :user_agent => env['HTTP_USER_AGENT'],
           :server_name => env['SERVER_NAME'],
           :server_port => env['SERVER_PORT'],
