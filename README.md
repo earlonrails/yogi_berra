@@ -33,6 +33,11 @@ Create a yogi.yml file in rails root config/ folder. Here is a sample:
       database: yogi_berra
       host: localhost
       port: 27017
+      
+View
+----
+To view the exceptions you check them in the database or install this rails app.
+https://github.com/earlonrails/yogi_berra_scoreboard.git
 
 Thanks
 ------
