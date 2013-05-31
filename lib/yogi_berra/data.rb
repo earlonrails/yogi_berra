@@ -15,6 +15,7 @@ module YogiBerra
     def self.parse_exception(notice)
       data_hash = {
         :error_class => notice.error_class,
+        :project => YogiBerra::Catcher.settings["project"],
         :error_message => notice.error_message
       }
       if notice.backtrace.lines.any?
