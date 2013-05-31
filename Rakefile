@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rubygems/package_task'
 require 'rspec/core/rake_task'
 
-spec = eval(File.read('yogi_berra_client.gemspec'))
+spec = eval(File.read('yogi_berra.gemspec'))
 
 Gem::PackageTask.new(spec) do |p|
   p.gem_spec = spec

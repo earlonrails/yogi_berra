@@ -18,8 +18,7 @@ module YogiBerra
                    end
 
     if defined?(::Rails.configuration) && ::Rails.configuration.respond_to?(:middleware)
-      ::Rails.configuration.middleware.insert_after 'ActionController::Failsafe',
-                                                    YogiBerra::ExceptionMiddleware
+      ::Rails.configuration.middleware.insert_after('ActionController::Failsafe', YogiBerra::ExceptionMiddleware)
       # ::Rails.configuration.middleware.insert_after 'Rack::Lock',
       #                                               YogiBerra::UserInformer
     end

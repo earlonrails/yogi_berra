@@ -1,13 +1,14 @@
-require "yogi_berra/catcher"
-require "yogi_berra/backtrace"
-require "yogi_berra/notice"
-require "yogi_berra/exception_middleware"
-require "yogi_berra/data"
+require 'yogi_berra/catcher'
+require 'yogi_berra/backtrace'
+require 'yogi_berra/notice'
+require 'yogi_berra/exception_middleware'
+require 'yogi_berra/data'
+require 'yogi_berra/logger'
 
 if defined?(::Rails.version) && ::Rails.version.to_f >= 3.0
-  require "yogi_berra/engine"
+  require 'yogi_berra/engine'
 else
-  require "yogi_berra/rails"
+  require 'yogi_berra/rails'
 end
 
 module YogiBerra
@@ -22,7 +23,7 @@ module YogiBerra
       if database
         YogiBerra::Data.store!(notice, environment, database)
       else
-        Rails.logger.error "[YogiBerra Error] No database connection!"
+        YogiBerra::Logger.log("No database connection!", :error)
       end
     end
 
