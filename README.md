@@ -35,6 +35,23 @@ Create a yogi.yml file in rails root config/ folder. Here is a sample:
       host: localhost
       port: 27017
 
+Without Rails
+-------------
+
+Set `YOGI_ENV` variable to tell yogi which environment you would like to use.
+For instance given the previous yaml file, one could use `YOGI_ENV=development`.
+
+Use `YogiBerra::Catcher.load_db_settings("location_to_some_yaml_file.yml")` to load your database settings.
+
+Finally store a rescued exception:
+
+    YogiBerra::Catcher.quick_connection
+    begin
+      raise Exception
+    rescue => raised
+      YogiBerra.exceptionize(raised, environment, YogiBerra::Catcher.connection)
+    end
+
 View
 ----
 To view the exceptions you check them in the database or install this rails app.
