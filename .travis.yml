@@ -13,3 +13,8 @@ rvm:
 
 script:
   - bundle exec rake spec
+
+env: YOGI_ENV=test
+
+services:
+  - mongodb
