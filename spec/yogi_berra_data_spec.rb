@@ -23,7 +23,7 @@ describe YogiBerra do
     parsed_data[:error_class].should == "Exception"
     parsed_data[:project].should == "test_yogi_project"
     parsed_data[:error_message].should == "Exception"
-    parsed_data[:backtraces].size.should > 17
+    parsed_data[:backtraces].size.should > 1
   end
 
   it "should parse a session" do
