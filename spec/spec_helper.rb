@@ -4,7 +4,6 @@ require 'yogi_berra'
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 # Helper methods
-
 # Creates RunTimeError
 def build_exception
   raise

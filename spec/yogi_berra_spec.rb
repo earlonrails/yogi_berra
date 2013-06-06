@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'tempfile'
 
 describe YogiBerra do
   before(:all) do
     @test_yaml = "spec/fixtures/test.yml"
+    ENV["YOGI_ENV"] = "test"
   end
 
   before(:each) do
