@@ -19,7 +19,7 @@ module YogiBerra
           begin
             File.open(database_config, 'r') do |f|
               yaml_file = YAML.load(f)
-              environment = ENV["RAILS_ENV"] ? ENV["RAILS_ENV"] : ENV["YOGI_ENV"]
+              environment = (ENV["YOGI_ENV"] || ENV["RAILS_ENV"] || "test")
               @@settings = yaml_file["#{environment}"] if yaml_file
             end
           rescue

@@ -3,6 +3,6 @@ ENV["RAILS_ENV"] = "test"
 
 class Rails
   def self.root
-    "spec/fixtures"
+    "#{SPEC_FOLDER}/fixtures"
   end
 end
