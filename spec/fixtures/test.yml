@@ -1,0 +1,10 @@
+defaults: &defaults
+  username: yogi
+  password: berra
+  project: test_yogi_project
+
+test:
+  <<: *defaults
+  database: yogi_berra
+  host: localhost
+  port: 27017

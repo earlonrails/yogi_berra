@@ -5,6 +5,7 @@ require 'yogi_berra/exception_middleware'
 require 'yogi_berra/data'
 require 'yogi_berra/logger'
 
+ENV["YOGI_ENV"] ||= "test"
 if defined?(::Rails.version) && ::Rails.version.to_f >= 3.0
   require 'yogi_berra/engine'
 else

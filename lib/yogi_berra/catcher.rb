@@ -20,12 +20,12 @@ module YogiBerra
             File.open(database_config, 'r') do |f|
               yaml_file = YAML.load(f)
               environment = ENV["RAILS_ENV"] ? ENV["RAILS_ENV"] : ENV["YOGI_ENV"]
-              YogiBerra::Logger.log("I get here! #{environment.inspect}", :info)
               @@settings = yaml_file["#{environment}"] if yaml_file
             end
           rescue
             YogiBerra::Logger.log("No such file: #{database_config}", :error)
           end
+          @@settings
         end
       end
 
@@ -39,20 +39,21 @@ module YogiBerra
       end
 
       def quick_connection
-        settings = @@settings || load_db_settings
+        load_db_settings
 
-        if settings
-          host = settings["host"]
-          port = settings["port"]
+        if @@settings
+          host = @@settings["host"]
+          port = @@settings["port"]
           client = db_client(host, port)
           if client
-            @@connection = client[settings["database"]]
+            @@connection = client[@@settings["database"]]
           else
             YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.", :error)
           end
         else
           YogiBerra::Logger.log("Couldn't load the yogi.yml file.", :error)
         end
+        @@connection
       end
     end
   end
