@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rake', '10.0.4')
   s.add_development_dependency('rspec', '2.13.0')
   s.add_dependency('bson', '1.8.3')
-  s.add_dependency('bson_ext', '1.8.3') unless RUBY_PLATFORM == "java"
   s.add_dependency('mongo', '1.8.3')
 end
 

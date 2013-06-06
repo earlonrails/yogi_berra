@@ -37,7 +37,7 @@ module YogiBerra
           :server_address => request.headers['SERVER_ADDR'],
           :remote_address => request.remote_ip
         }
-      error_id = YogiBerra.exceptionize(exception, environment, YogiBerra::Catcher.connection)
+      error_id = YogiBerra.exceptionize(exception, environment)
       request.env['yogi_berra.error_id'] = error_id
     end
 

@@ -18,10 +18,10 @@ module YogiBerra
     # @params exception
     # @params environment
     # @params database
-    def exceptionize(exception, environment, database, opts = {})
+    def exceptionize(exception, environment, opts = {})
       notice = build_notice_for(exception, opts)
-      if database
-        YogiBerra::Data.store!(notice, environment, database)
+      if YogiBerra::Catcher.connection
+        YogiBerra::Data.store!(notice, environment)
       else
         YogiBerra::Logger.log("No database connection!", :error)
       end

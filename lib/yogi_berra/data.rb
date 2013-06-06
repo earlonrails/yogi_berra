@@ -2,23 +2,24 @@ require 'mongo'
 
 module YogiBerra
   class Data
-    def self.store!(exception, environment, client)
+    def self.store!(exception, environment = nil)
       data = parse_exception(exception)
       if environment
         session = environment.delete(:session)
         data[:session] = parse_session(session) if session
         data.merge!(environment)
       end
-      client["caught_exceptions"].insert(data)
+      (YogiBerra::Catcher.connection || YogiBerra::Catcher.quick_connection)["caught_exceptions"].insert(data)
     end
 
     def self.parse_exception(notice)
       data_hash = {
-        :error_class => notice.error_class,
+        :error_class => "#{notice.class}",
         :project => YogiBerra::Catcher.settings["project"],
-        :error_message => notice.error_message
+        :error_message => notice.respond_to?(:error_message) ? notice.error_message : notice.message
       }
-      if notice.backtrace.lines.any?
+      data_hash[:backtraces] = notice.backtrace
+      if notice.backtrace.respond_to?(:lines) && notice.backtrace.lines.any?
         data_hash[:backtraces] = notice.backtrace.lines.collect(&:to_s)
       end
       data_hash[:created_at] = Time.now.utc
@@ -27,7 +28,14 @@ module YogiBerra
 
     def self.parse_session(session)
       session.inject({}) do |result, element|
-        result[element.first] = element.last.respond_to?(:as_json) ? element.last.as_json(:except => ["password"]) : element.last
+        key = element.first
+        value = element.last
+        if value.respond_to?(:as_json)
+          result[key] = value.as_json(:except => ["password"])
+        else
+          value.delete("password")
+          result[key] = value
+        end
         result
       end
     end

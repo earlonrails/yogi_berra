@@ -20,12 +20,12 @@ module YogiBerra
           :remote_address => env['REMOTE_ADDR']
         }
       rescue Exception => raised
-        YogiBerra.exceptionize(raised, environment, YogiBerra::Catcher.connection)
+        YogiBerra.exceptionize(raised, environment)
         raise raised
       end
 
       if env['rack.exception']
-        YogiBerra.exceptionize(raised, environment, YogiBerra::Catcher.connection)
+        YogiBerra.exceptionize(raised, environment)
       end
       response
     end

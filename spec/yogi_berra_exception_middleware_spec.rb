@@ -1,10 +1,6 @@
 require 'spec_helper'
 
-describe YogiBerra do
-  before(:all) do
-    @test_yaml = "#{SPEC_FOLDER}/fixtures/test.yml"
-  end
-
+describe YogiBerra::ExceptionMiddleware do
   before(:each) do
     YogiBerra::Logger.stub(:log)
   end
@@ -52,34 +48,5 @@ describe YogiBerra do
     actual_response[0].should == 200
     actual_response[1].should == {}
     actual_response[2].instance_variable_get("@response").should == ["okay"]
-  end
-
-  it "should load a yaml file without rails" do
-    lambda { YogiBerra::Catcher.load_db_settings(@test_yaml) }.should_not raise_error
-    YogiBerra::Catcher.settings.should_not == nil
-    YogiBerra::Catcher.settings["project"].should == "test_yogi_project"
-  end
-
-  it "should load a yaml file with rails" do
-    ENV["YOGI_ENV"] = nil
-    require 'fixtures/rails'
-    lambda { YogiBerra::Catcher.load_db_settings }.should_not raise_error
-    YogiBerra::Catcher.settings.should_not == nil
-    YogiBerra::Catcher.settings["project"].should == "rails_yogi_project"
-    Object.send(:remove_const, :Rails)
-  end
-
-  it "should grab a connection using the settings file" do
-    connection = nil
-    YogiBerra::Catcher.load_db_settings(@test_yaml)
-    connection = YogiBerra::Catcher.quick_connection
-    connection.should_not == nil
-  end
-
-  it "should grab a connection to mongodb" do
-    yaml = nil
-    yaml = YogiBerra::Catcher.load_db_settings(@test_yaml)
-    db_client = YogiBerra::Catcher.db_client(YogiBerra::Catcher.settings["host"], YogiBerra::Catcher.settings["port"])
-    db_client.should_not == nil
   end
 end

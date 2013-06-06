@@ -3,15 +3,12 @@ PATH
   specs:
     yogi_berra (0.0.3)
       bson (= 1.8.3)
-      bson_ext (= 1.8.3)
       mongo (= 1.8.3)
 
 GEM
   remote: https://rubygems.org/
   specs:
     bson (1.8.3)
-    bson_ext (1.8.3)
-      bson (~> 1.8.3)
     builder (3.2.1)
     diff-lcs (1.2.4)
     mongo (1.8.3)

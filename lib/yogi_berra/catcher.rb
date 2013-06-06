@@ -39,7 +39,7 @@ module YogiBerra
       end
 
       def quick_connection
-        load_db_settings
+        load_db_settings unless @@settings
 
         if @@settings
           host = @@settings["host"]
