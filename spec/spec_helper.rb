@@ -1,5 +1,4 @@
 SPEC_FOLDER = File.dirname(__FILE__)
-require 'yaml'
 require 'yogi_berra'
 require 'rspec/mocks'
 # Helper methods
@@ -20,3 +19,13 @@ def build_session
   }
 end
 
+def mock_mongo_client(client_should = false, connection_should = false)
+  mongo_client = double('mongo client')
+  mongo_connection = double('mongo connection')
+  Mongo::MongoClient.should_receive(:new) { mongo_client }
+  mongo_client.should_receive(:[]) { mongo_connection } if client_should
+  if connection_should
+    mongo_connection.should_receive(:[]) { mongo_connection }
+    mongo_connection.should_receive(:insert)
+  end
+end

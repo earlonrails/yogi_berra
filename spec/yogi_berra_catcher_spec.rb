@@ -25,6 +25,7 @@ describe YogiBerra do
   end
 
   it "should grab a connection using the settings file" do
+    mock_mongo_client(true)
     connection = nil
     YogiBerra::Catcher.load_db_settings(@test_yaml)
     connection = YogiBerra::Catcher.quick_connection
@@ -32,6 +33,7 @@ describe YogiBerra do
   end
 
   it "should grab a connection to mongodb" do
+    mock_mongo_client
     yaml = nil
     yaml = YogiBerra::Catcher.load_db_settings(@test_yaml)
     db_client = YogiBerra::Catcher.db_client(YogiBerra::Catcher.settings["host"], YogiBerra::Catcher.settings["port"])

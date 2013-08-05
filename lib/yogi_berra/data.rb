@@ -9,7 +9,7 @@ module YogiBerra
         data[:session] = parse_session(session) if session
         data.merge!(environment)
       end
-      (YogiBerra::Catcher.connection || YogiBerra::Catcher.quick_connection)["caught_exceptions"].insert(data)
+      YogiBerra::Catcher.connection["caught_exceptions"].insert(data)
     end
 
     def self.parse_exception(notice)

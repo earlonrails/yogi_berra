@@ -1,5 +1,6 @@
 require 'mongo'
 require 'facets'
+require 'yaml'
 
 module YogiBerra
   class Catcher
@@ -38,8 +39,8 @@ module YogiBerra
         nil
       end
 
-      def quick_connection
-        load_db_settings unless @@settings
+      def quick_connection(load_settings = false)
+        load_db_settings if load_settings
 
         if @@settings
           host = @@settings["host"]
@@ -51,7 +52,7 @@ module YogiBerra
             YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.", :error)
           end
         else
-          YogiBerra::Logger.log("Couldn't load the yogi.yml file.", :error)
+          YogiBerra::Logger.log("Couldn't load the yogi.yml file.", :error) if load_settings
         end
         @@connection
       end

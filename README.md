@@ -49,7 +49,7 @@ Finally store a rescued exception:
     begin
       raise Exception
     rescue => raised
-      YogiBerra.exceptionize(raised, environment, YogiBerra::Catcher.connection)
+      YogiBerra.exceptionize(raised)
     end
 
 View

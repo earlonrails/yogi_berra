@@ -6,6 +6,7 @@ describe YogiBerra::ExceptionMiddleware do
   end
 
   it "should call the upstream app with the environment" do
+    mock_mongo_client(true)
     environment = { 'key' => 'value' }
     app = lambda { |env| ['response', {}, env] }
     stack = YogiBerra::ExceptionMiddleware.new(app)
@@ -18,6 +19,7 @@ describe YogiBerra::ExceptionMiddleware do
   end
 
   it "deliver an exception raised while calling an upstream app" do
+    mock_mongo_client(true, true)
     exception = build_exception
     environment = { 'key' => 'value' }
     app = lambda do |env|
@@ -33,6 +35,7 @@ describe YogiBerra::ExceptionMiddleware do
   end
 
   it "should deliver an exception in rack.exception" do
+    mock_mongo_client(true, true)
     exception = build_exception
     environment = { 'key' => 'value' }
 

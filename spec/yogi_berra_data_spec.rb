@@ -3,17 +3,13 @@ require 'spec_helper'
 describe YogiBerra do
   before(:each) do
     YogiBerra::Logger.stub(:log)
+    YogiBerra::Catcher.load_db_settings("#{SPEC_FOLDER}/fixtures/test.yml")
   end
 
   it "should store an exception" do
-    YogiBerra::Catcher.connection = nil
     exception = build_exception
-    mongo_client = double('mongo client')
-    mongo_connection = double('mongo connection')
-    Mongo::MongoClient.should_receive(:new) { mongo_client }
-    mongo_client.should_receive(:[]) { mongo_connection }
-    mongo_connection.should_receive(:[]) { mongo_connection }
-    mongo_connection.should_receive(:insert)
+    mock_mongo_client(true, true)
+    YogiBerra::Catcher.quick_connection
     YogiBerra::Data.store!(exception)
   end
 
