@@ -30,10 +30,14 @@ module YogiBerra
         end
       end
 
-      def db_client(host, port)
+      def db_client(host, port, replica_set = nil)
         # :w => 0 set the default write concern to 0, this allows writes to be non-blocking
         # by not waiting for a response from mongodb
-        @@mongo_client = Mongo::MongoClient.new(host, port, :w => 0)
+        if replica_set
+          @@mongo_client = Mongo::MongoClient.new(replica_set, :w => 0)
+        else
+          @@mongo_client = Mongo::MongoClient.new(host, port, :w => 0)
+        end
       rescue
         YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.", :error)
         nil
@@ -45,7 +49,8 @@ module YogiBerra
         if @@settings
           host = @@settings["host"]
           port = @@settings["port"]
-          client = db_client(host, port)
+          replica_set = @@settings["replica_set"]
+          client = db_client(host, port, replica_set)
           if client
             @@connection = client[@@settings["database"]]
           else
