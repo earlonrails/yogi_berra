@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = "earlkrauss@gmail.com"
   s.license = 'MIT'
 
-  s.files = Dir["lib/**/*"] + ["Gemfile", "Gemfile.lock", "LICENSE", "Rakefile", "README.md"]
+  s.files = Dir["lib/**/*"] + ["Gemfile", "LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
   s.version = YogiBerra::VERSION
 
