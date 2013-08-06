@@ -3,7 +3,6 @@ module YogiBerra
   module ActionControllerCatcher
     # Sets up an alias chain to catch exceptions for Rails 2
     def self.included(base)
-      YogiBerra::Catcher.quick_connection(true)
       if base.method_defined?(:rescue_action_in_public)
         base.send(:alias_method, :rescue_action_in_public_without_yogi, :rescue_action_in_public)
         base.send(:alias_method, :rescue_action_in_public, :rescue_action_in_public_with_yogi)

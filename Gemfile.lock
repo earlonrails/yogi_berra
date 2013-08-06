@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    yogi_berra (0.0.5)
+    yogi_berra (0.0.6)
       bson (= 1.8.3)
       mongo (= 1.8.3)
 
