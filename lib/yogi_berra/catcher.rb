@@ -34,7 +34,7 @@ module YogiBerra
         # :w => 0 set the default write concern to 0, this allows writes to be non-blocking
         # by not waiting for a response from mongodb
         if replica_set
-          @@mongo_client = Mongo::MongoClient.new(replica_set, :w => 0)
+          @@mongo_client = Mongo::MongoReplicaSetClient.new(replica_set, :w => 0)
         else
           @@mongo_client = Mongo::MongoClient.new(host, port, :w => 0)
         end
