@@ -17,8 +17,8 @@ module YogiBerra
     # @see YogiBerra.exceptionize
     # @params exception
     # @params environment
-    # @params database
-    def exceptionize(exception, environment, opts = {})
+    # @params opts
+    def exceptionize(exception, environment = nil, opts = {})
       notice = build_notice_for(exception, opts)
       if YogiBerra::Catcher.connection
         YogiBerra::Data.store!(notice, environment)

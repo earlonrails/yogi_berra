@@ -14,7 +14,7 @@ module YogiBerra
 
     def self.parse_exception(notice)
       data_hash = {
-        :error_class => "#{notice.class}",
+        :error_class => "#{notice.exception.class}",
         :project => YogiBerra::Catcher.settings["project"],
         :error_message => notice.respond_to?(:error_message) ? notice.error_message : notice.message
       }
