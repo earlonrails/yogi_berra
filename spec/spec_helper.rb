@@ -1,6 +1,7 @@
 SPEC_FOLDER = File.dirname(__FILE__)
 require 'yogi_berra'
 require 'rspec/mocks'
+
 # Helper methods
 # Creates RunTimeError
 def build_exception
@@ -27,5 +28,12 @@ def mock_mongo_client(client_should = false, connection_should = false)
   if connection_should
     mongo_connection.should_receive(:[]) { mongo_connection }
     mongo_connection.should_receive(:insert)
+  end
+  mongo_connection
+end
+
+def reset_if_rails
+  if defined?(Rails)
+    Object.send(:remove_const, :Rails)
   end
 end

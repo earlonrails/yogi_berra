@@ -1,8 +1,10 @@
 require 'spec_helper'
+require 'fixtures/rails'
 
 describe YogiBerra::ExceptionMiddleware do
   before(:each) do
     YogiBerra::Logger.stub(:log)
+    ENV['RAILS_ENV'] = "test"
   end
 
   it "should call the upstream app with the environment" do

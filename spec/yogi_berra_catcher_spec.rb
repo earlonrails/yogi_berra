@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe YogiBerra do
+describe YogiBerra::Catcher do
   before(:all) do
     @test_yaml = "#{SPEC_FOLDER}/fixtures/test.yml"
   end

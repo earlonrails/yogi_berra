@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe YogiBerra do
+describe YogiBerra::Data do
   before(:each) do
     YogiBerra::Logger.stub(:log)
     YogiBerra::Catcher.load_db_settings("#{SPEC_FOLDER}/fixtures/test.yml")

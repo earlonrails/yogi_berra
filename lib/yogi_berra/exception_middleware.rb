@@ -2,7 +2,7 @@ module YogiBerra
   class ExceptionMiddleware
     def initialize(app)
       @app = app
-      YogiBerra::Catcher.quick_connection
+      YogiBerra::Catcher.quick_connection(true)
     end
 
     def call(env)

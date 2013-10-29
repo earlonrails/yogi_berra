@@ -3,6 +3,7 @@ require 'spec_helper'
 describe YogiBerra::Logger do
 
   it "should call $stderr to log" do
+    reset_if_rails
     $stderr.should_receive(:puts).with("[YogiBerra Info] The future ain't what it used to be.")
     YogiBerra::Logger.log("The future ain't what it used to be.")
   end

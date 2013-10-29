@@ -22,8 +22,6 @@ module YogiBerra
       notice = build_notice_for(exception, opts)
       if YogiBerra::Catcher.connection
         YogiBerra::Data.store!(notice, environment)
-      else
-        YogiBerra::Logger.log("No database connection!", :error)
       end
     end
 

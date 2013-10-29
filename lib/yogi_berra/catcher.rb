@@ -20,13 +20,24 @@ module YogiBerra
           begin
             File.open(database_config, 'r') do |f|
               yaml_file = YAML.load(f)
-              environment = (ENV["YOGI_ENV"] || ENV["RAILS_ENV"] || "test")
               @@settings = yaml_file["#{environment}"] if yaml_file
             end
           rescue
             YogiBerra::Logger.log("No such file: #{database_config}", :error)
           end
           @@settings
+        end
+      end
+
+      def environment
+        if ENV["YOGI_ENV"]
+          ENV["YOGI_ENV"]
+        elsif defined?(Rails)
+          Rails.env
+        elsif ENV["RAILS_ENV"]
+          ENV["RAILS_ENV"]
+        else
+          "test"
         end
       end
 
