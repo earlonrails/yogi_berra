@@ -3,17 +3,17 @@ $:.push File.expand_path("../lib", __FILE__)
 require "yogi_berra/version"
 
 Gem::Specification.new do |s|
-  s.name = "yogi_berra"
-  s.summary = "Catches errors in your rails app and doesn't get in the way."
-  s.description = "If the world were perfect, it wouldn't be. So you need the best error catcher of all time!"
-  s.homepage    = "http://github.com/earlonrails/yogi_berra"
-  s.authors     = ["Kevin Earl Krauss"]
-  s.email       = "earlkrauss@gmail.com"
-  s.license = 'MIT'
+  s.name          = "yogi_berra"
+  s.summary       = "Catches errors in your rails app and doesn't get in the way."
+  s.description   = "If the world were perfect, it wouldn't be. So you need the best error catcher of all time!"
+  s.homepage      = "http://github.com/earlonrails/yogi_berra"
+  s.authors       = ["Kevin Earl Krauss"]
+  s.email         = "earlkrauss@gmail.com"
+  s.license       = 'MIT'
 
-  s.files = Dir["lib/**/*"] + ["Gemfile", "LICENSE", "Rakefile", "README.md"]
-  s.test_files = Dir["spec/**/*"]
-  s.version = YogiBerra::VERSION
+  s.files         = Dir["lib/**/*"] + ["Gemfile", "LICENSE", "Rakefile", "README.md"]
+  s.test_files    = Dir["spec/**/*"]
+  s.version       = YogiBerra::VERSION
 
   s.require_paths = ["lib"]
   s.add_development_dependency('rake', '10.0.4')
