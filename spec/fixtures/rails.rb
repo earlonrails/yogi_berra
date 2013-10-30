@@ -8,3 +8,5 @@ class Rails
     "test"
   end
 end
+
+ENV['RAILS_ENV'] = "test"
