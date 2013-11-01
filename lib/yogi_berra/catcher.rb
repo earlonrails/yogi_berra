@@ -71,7 +71,7 @@ module YogiBerra
               begin
                 @@connection.authenticate(username, password)
               rescue
-                YogiBerra::Logger.log("Couldn't authenticate with user #{user} to mongo database on host: #{host} port: #{port} database: #{database}.", :warn)
+                YogiBerra::Logger.log("Couldn't authenticate with user #{username} to mongo database on host: #{host} port: #{port} database: #{database}.", :warn)
               end
             end
           else
