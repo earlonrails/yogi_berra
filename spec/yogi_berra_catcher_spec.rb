@@ -34,9 +34,22 @@ describe YogiBerra::Catcher do
 
   it "should grab a connection to mongodb" do
     mock_mongo_client(false, false, false)
-    yaml = nil
-    yaml = YogiBerra::Catcher.load_db_settings(@test_yaml)
+    YogiBerra::Catcher.load_db_settings(@test_yaml)
     db_client = YogiBerra::Catcher.db_client(YogiBerra::Catcher.settings["host"], YogiBerra::Catcher.settings["port"])
     db_client.should_not == nil
+  end
+
+  it "should grab a connection and authenticate" do
+    mock_mongo_client(true, false, true)
+    YogiBerra::Catcher.load_db_settings(@test_yaml)
+    connection = YogiBerra::Catcher.quick_connection
+    connection.should_not == nil
+  end
+
+  it "should grab a connection and fail to authenticate" do
+    mock_mongo_client(true, false, :error)
+    YogiBerra::Catcher.load_db_settings(@test_yaml)
+    connection = YogiBerra::Catcher.quick_connection
+    connection.should_not == nil
   end
 end
