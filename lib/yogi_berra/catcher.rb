@@ -60,12 +60,19 @@ module YogiBerra
         if @@settings
           host = @@settings["host"]
           port = @@settings["port"]
+          database = @@settings["database"]
+          username = @@settings["username"]
+          password = @@settings["password"]
           replica_set = @@settings["replica_set"]
           client = db_client(host, port, replica_set)
           if client
-            @@connection = client[@@settings["database"]]
-            if @@connection && @@settings["username"] && @@settings["password"]
-              @@connection.authenticate(@@settings["username"], @@settings["password"])
+            @@connection = client[database]
+            if @@connection && username && password
+              begin
+                @@connection.authenticate(username, password)
+              rescue
+                YogiBerra::Logger.log("Couldn't authenticate with user #{user} to mongo database on host: #{host} port: #{port} database: #{database}.", :warn)
+              end
             end
           else
             YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.", :error)
