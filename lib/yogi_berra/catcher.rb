@@ -64,6 +64,9 @@ module YogiBerra
           client = db_client(host, port, replica_set)
           if client
             @@connection = client[@@settings["database"]]
+            if @@connection && @@settings["username"] && @@settings["password"]
+              @@connection.authenticate(@@settings["username"], @@settings["password"])
+            end
           else
             YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.", :error)
           end

@@ -33,7 +33,7 @@ describe YogiBerra::Catcher do
   end
 
   it "should grab a connection to mongodb" do
-    mock_mongo_client
+    mock_mongo_client(false, false, false)
     yaml = nil
     yaml = YogiBerra::Catcher.load_db_settings(@test_yaml)
     db_client = YogiBerra::Catcher.db_client(YogiBerra::Catcher.settings["host"], YogiBerra::Catcher.settings["port"])
