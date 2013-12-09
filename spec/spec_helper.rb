@@ -20,21 +20,25 @@ def build_session
   }
 end
 
-def mock_mongo_client(client_should = false, connection_should = false, auth = true)
-  mongo_client = double('mongo client')
-  mongo_connection = double('mongo connection')
-  Mongo::MongoClient.should_receive(:new) { mongo_client }
-  mongo_client.should_receive(:[]) { mongo_connection } if client_should
-  if auth
-    mongo_connection.should_receive(:authenticate)
-  elsif auth == :error
-    mongo_connection.should_receive(:authenticate).and_raise
+def mock_mongo_client(opts)
+  if opts[:timeout]
+    Timeout.should_receive(:timeout).and_raise(Timeout::Error)
+  else
+    mongo_client = double('mongo client')
+    mongo_connection = double('mongo connection')
+    Mongo::MongoClient.should_receive(:new) { mongo_client }
+    mongo_client.should_receive(:[]) { mongo_connection } if opts[:client_should]
+    if opts[:auth] == :error
+      mongo_connection.should_receive(:authenticate).and_raise
+    elsif opts[:auth].nil? || opts[:auth]
+      mongo_connection.should_receive(:authenticate)
+    end
+
+    if opts[:connection_should]
+      mongo_connection.should_receive(:[]) { mongo_connection }
+      mongo_connection.should_receive(:insert)
+    end
   end
-  if connection_should
-    mongo_connection.should_receive(:[]) { mongo_connection }
-    mongo_connection.should_receive(:insert)
-  end
-  mongo_connection
 end
 
 def reset_if_rails

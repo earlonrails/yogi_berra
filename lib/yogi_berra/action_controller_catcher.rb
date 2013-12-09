@@ -39,6 +39,5 @@ module YogiBerra
       error_id = YogiBerra.exceptionize(exception, environment)
       request.env['yogi_berra.error_id'] = error_id
     end
-
   end
 end

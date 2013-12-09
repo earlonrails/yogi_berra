@@ -1,6 +1,7 @@
 require 'mongo'
 require 'facets'
 require 'yaml'
+require 'timeout'
 
 module YogiBerra
   class Catcher
@@ -44,13 +45,14 @@ module YogiBerra
       def db_client(host, port, replica_set = nil)
         # :w => 0 set the default write concern to 0, this allows writes to be non-blocking
         # by not waiting for a response from mongodb
+        # :connect_timeout set to 5 will only wait 5 seconds failing to connect
         if replica_set
-          @@mongo_client = Mongo::MongoReplicaSetClient.new(replica_set, :w => 0)
+          @@mongo_client = Mongo::MongoReplicaSetClient.new(replica_set, w: 0, connect_timeout: 5)
         else
-          @@mongo_client = Mongo::MongoClient.new(host, port, :w => 0)
+          @@mongo_client = Mongo::MongoClient.new(host, port, w: 0, connect_timeout: 5)
         end
-      rescue
-        YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.", :error)
+      rescue => error
+        YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.\n #{error}", :error)
         nil
       end
 
