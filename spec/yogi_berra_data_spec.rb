@@ -8,7 +8,7 @@ describe YogiBerra::Data do
 
   it "should store an exception" do
     exception = build_exception
-    mock_mongo_client(client_should: true, connection_should: true)
+    mock_mongo_client(:client_should => true, :connection_should => true)
     YogiBerra::Catcher.quick_connection
     YogiBerra::Data.store!(exception)
   end
