@@ -2,8 +2,6 @@ SPEC_FOLDER = File.dirname(__FILE__)
 require 'yogi_berra'
 require 'rspec/mocks'
 
-# Helper methods
-# Creates RunTimeError
 def build_exception
   raise Exception
 rescue Exception => caught_exception
@@ -20,25 +18,30 @@ def build_session
   }
 end
 
-def mock_mongo_client(opts)
-  if opts[:timeout]
-    Timeout.should_receive(:timeout).and_raise(Timeout::Error)
-  else
-    mongo_client = double('mongo client')
-    mongo_connection = double('mongo connection')
-    Mongo::MongoClient.should_receive(:new) { mongo_client }
-    mongo_client.should_receive(:[]) { mongo_connection } if opts[:client_should]
-    if opts[:auth] == :error
-      mongo_connection.should_receive(:authenticate).and_raise
-    elsif opts[:auth].nil? || opts[:auth]
-      mongo_connection.should_receive(:authenticate)
-    end
+def mock_mongo(opts)
+  mongo_client = double('mongo client')
+  mongo_connection = double('mongo connection')
 
-    if opts[:connection_should]
-      mongo_connection.should_receive(:[]) { mongo_connection }
-      mongo_connection.should_receive(:insert)
-    end
+  if opts[:mongo_client_stub]
+    Mongo::MongoClient.should_receive(:new) { mongo_client }
+    mongo_client.should_receive(:[]) { mongo_connection }
   end
+
+  if opts[:authenticate_stub] == :error
+    mongo_connection.should_receive(:authenticate).and_raise
+  else
+    mongo_connection.should_receive(:authenticate)
+  end
+
+  if opts[:connection_stub]
+    mongo_connection.should_receive(:[]) { mongo_connection }
+    mongo_connection.should_receive(:insert)
+  end
+end
+
+def mock_yogi_fork_database
+  client = YogiBerra::Catcher.fork_database.join
+  YogiBerra::Catcher.should_receive(:fork_database) { client }
 end
 
 def reset_if_rails

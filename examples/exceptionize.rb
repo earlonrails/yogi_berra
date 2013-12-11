@@ -3,7 +3,7 @@ require 'yogi_berra'
 YogiBerra::Catcher.load_db_settings("config/yogi.yml")
 ENV["YOGI_ENV"] = "development"
 YogiBerra::Catcher.load_db_settings("config/yogi.yml")
-YogiBerra::Catcher.quick_connection
+YogiBerra::Catcher.connect
 error = nil
 begin
   [

@@ -42,46 +42,47 @@ module YogiBerra
         end
       end
 
-      def db_client(host, port, replica_set = nil)
+      def fork_database
+        host = @@settings["host"]
+        port = @@settings["port"]
+        database = @@settings["database"]
+        username = @@settings["username"]
+        password = @@settings["password"]
+        replica_set = @@settings["replica_set"]
+
         # :w => 0 set the default write concern to 0, this allows writes to be non-blocking
         # by not waiting for a response from mongodb
-        # :connect_timeout set to 5 will only wait 5 seconds failing to connect
-        if replica_set
-          @@mongo_client = Mongo::MongoReplicaSetClient.new(replica_set, :w => 0, :connect_timeout => 5)
-        else
-          @@mongo_client = Mongo::MongoClient.new(host, port, :w => 0, :connect_timeout => 5)
+        Thread.new do
+          begin
+            if replica_set
+              @@mongo_client = Mongo::MongoReplicaSetClient.new(replica_set, :w => 0, :connect_timeout => 10)
+            else
+              @@mongo_client = Mongo::MongoClient.new(host, port, :w => 0, :connect_timeout => 10)
+            end
+          rescue Timeout::Error => timeout_error
+            YogiBerra::Logger.log("Couldn't connect to the mongo database timeout on host: #{host} port: #{port}.\n #{timeout_error.inspect}", :error)
+            retry
+          rescue => error
+            YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.\n #{error.inspect}", :error)
+            retry
+          end
+
+          @@connection = @@mongo_client[database]
+          if username && password
+            begin
+              @@connection.authenticate(username, password)
+            rescue
+              YogiBerra::Logger.log("Couldn't authenticate with user #{username} to mongo database on host: #{host} port: #{port} database: #{database}.", :warn)
+            end
+          end
         end
-      rescue Timeout::Error => error
-        YogiBerra::Logger.log("Couldn't connect to the mongo database timeout on host: #{host} port: #{port}.\n #{error}", :error)
-        nil
-      rescue => error
-        YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.", :error)
-        nil
       end
 
-      def quick_connection(load_settings = false)
+      def connect(load_settings = false)
         load_db_settings if load_settings
 
         if @@settings
-          host = @@settings["host"]
-          port = @@settings["port"]
-          database = @@settings["database"]
-          username = @@settings["username"]
-          password = @@settings["password"]
-          replica_set = @@settings["replica_set"]
-          client = db_client(host, port, replica_set)
-          if client
-            @@connection = client[database]
-            if @@connection && username && password
-              begin
-                @@connection.authenticate(username, password)
-              rescue
-                YogiBerra::Logger.log("Couldn't authenticate with user #{username} to mongo database on host: #{host} port: #{port} database: #{database}.", :warn)
-              end
-            end
-          else
-            YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.", :error)
-          end
+          fork_database
         else
           YogiBerra::Logger.log("Couldn't load the yogi.yml file.", :error) if load_settings
         end

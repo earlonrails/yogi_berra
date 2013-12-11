@@ -25,5 +25,5 @@ module YogiBerra
   end
 end
 
-YogiBerra::Catcher.quick_connection(true)
+YogiBerra::Catcher.connect(true)
 YogiBerra.initialize

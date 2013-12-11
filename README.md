@@ -45,7 +45,7 @@ Use `YogiBerra::Catcher.load_db_settings("location_to_some_yaml_file.yml")` to l
 
 Finally store a rescued exception:
 
-    YogiBerra::Catcher.quick_connection
+    YogiBerra::Catcher.connect
     begin
       raise Exception
     rescue => raised

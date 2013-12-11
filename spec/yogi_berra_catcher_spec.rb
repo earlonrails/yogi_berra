@@ -24,39 +24,33 @@ describe YogiBerra::Catcher do
     Object.send(:remove_const, :Rails)
   end
 
-  it "should grab a connection using the settings file" do
-    mock_mongo_client(:client_should => true)
-    connection = nil
+  it "should try to grab a connection using the settings file" do
+    mock_mongo(:mongo_client_stub => true)
     YogiBerra::Catcher.load_db_settings(@test_yaml)
-    connection = YogiBerra::Catcher.quick_connection
-    connection.should_not == nil
+    mock_yogi_fork_database
+    lambda { YogiBerra::Catcher.connect }.should_not raise_error
+    YogiBerra::Catcher.connection.should_not == nil
   end
 
   it "should grab a connection to mongodb" do
-    mock_mongo_client(:auth => false)
+    mock_mongo(:mongo_client_stub => true)
     YogiBerra::Catcher.load_db_settings(@test_yaml)
-    db_client = YogiBerra::Catcher.db_client(YogiBerra::Catcher.settings["host"], YogiBerra::Catcher.settings["port"])
-    db_client.should_not == nil
-  end
-
-  it "should grab a connection and fail to connect after 5 seconds" do
-    mock_mongo_client(:timeout => true)
-    YogiBerra::Catcher.load_db_settings(@test_yaml)
-    client = YogiBerra::Catcher.db_client(YogiBerra::Catcher.settings["host"], YogiBerra::Catcher.settings["port"])
-    client.should == nil
+    mock_yogi_fork_database
+    YogiBerra::Catcher.connect
+    YogiBerra::Catcher.mongo_client.should_not == nil
   end
 
   it "should grab a connection and authenticate" do
-    mock_mongo_client(:client_should => true)
+    mock_mongo(:mongo_client_stub => true)
     YogiBerra::Catcher.load_db_settings(@test_yaml)
-    connection = YogiBerra::Catcher.quick_connection
-    connection.should_not == nil
+    mock_yogi_fork_database
+    lambda { YogiBerra::Catcher.connect }.should_not raise_error
   end
 
   it "should grab a connection and fail to authenticate" do
-    mock_mongo_client(:client_should => true, :auth => :error)
+    mock_mongo(:mongo_client_stub => true, :authenticate_stub => :error)
     YogiBerra::Catcher.load_db_settings(@test_yaml)
-    connection = YogiBerra::Catcher.quick_connection
-    connection.should_not == nil
+    mock_yogi_fork_database
+    lambda { YogiBerra::Catcher.connect }.should_not raise_error
   end
 end
