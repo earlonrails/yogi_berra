@@ -16,6 +16,7 @@ module YogiBerra
           :server_name => env['SERVER_NAME'],
           :server_port => env['SERVER_PORT'],
           :server_address => env['SERVER_ADDR'],
+          :controller => env['action_controller.instance'],
           :remote_address => env['REMOTE_ADDR']
         }
         response = dup._call(env)

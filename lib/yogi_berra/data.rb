@@ -7,6 +7,8 @@ module YogiBerra
       if environment
         session = environment.delete(:session)
         data[:session] = parse_session(session) if session
+        controller = environment.delete(:controller)
+        data[:controller] = parse_controller(controller) if controller
         data.merge!(environment)
       end
       YogiBerra::Catcher.connection["caught_exceptions"].insert(data)
@@ -37,6 +39,12 @@ module YogiBerra
           result[key] = value
         end
         result
+      end
+    end
+
+    def self.parse_controller(controller)
+      if controller
+        { :action => controller.action_name, :name => controller.controller_name }
       end
     end
   end
