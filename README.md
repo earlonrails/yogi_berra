@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/earlonrails/yogi_berra.png?branch=master)](https://travis-ci.org/earlonrails/yogi_berra)
+
 Yogi Berra
 ==========
 
