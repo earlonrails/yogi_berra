@@ -7,7 +7,7 @@ module YogiBerra
 
     def call(env)
       begin
-        @app.call(env)
+        response = @app.call(env)
       rescue Exception => raised
         path_parameters = env['action_controller.request.path_parameters'] || {}
         query_hash      = env['rack.request.query_hash'] || {}
@@ -25,6 +25,11 @@ module YogiBerra
         YogiBerra.exceptionize(raised, environment)
         raise raised
       end
+
+      if env['rack.exception']
+        YogiBerra.exceptionize(raised, environment)
+      end
+      response
     end
 
     def each(&block)

@@ -17,7 +17,7 @@ describe YogiBerra::ExceptionMiddleware do
 
     response[0].should == 'response'
     response[1].should == {}
-    response[2].instance_variable_get("@response").should == { 'key' => 'value' }
+    response[2].should == { 'key' => 'value' }
   end
 
   it "deliver an exception raised while calling an upstream app" do
@@ -54,6 +54,6 @@ describe YogiBerra::ExceptionMiddleware do
 
     actual_response[0].should == 200
     actual_response[1].should == {}
-    actual_response[2].instance_variable_get("@response").should == ["okay"]
+    actual_response[2].should == ["okay"]
   end
 end
