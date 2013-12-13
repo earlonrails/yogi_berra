@@ -7,6 +7,8 @@ module YogiBerra
 
     def call(env)
       begin
+        @app.call(env)
+      rescue Exception => raised
         path_parameters = env['action_controller.request.path_parameters'] || {}
         query_hash      = env['rack.request.query_hash'] || {}
         environment = {
@@ -19,26 +21,14 @@ module YogiBerra
           :controller => env['action_controller.instance'],
           :remote_address => env['REMOTE_ADDR']
         }
-        response = dup._call(env)
-      rescue Exception => raised
+
         YogiBerra.exceptionize(raised, environment)
         raise raised
       end
-
-      if env['rack.exception']
-        YogiBerra.exceptionize(raised, environment)
-      end
-      response
-    end
-
-    def _call(env)
-      @status, @headers, @response = @app.call(env)
-      [@status, @headers, self]
     end
 
     def each(&block)
       @response.each(&block)
     end
-
   end
 end
