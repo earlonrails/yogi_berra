@@ -12,11 +12,12 @@ module YogiBerra
       def load_db_settings(config_file = nil)
         if config_file
           database_config = config_file
-        elsif defined?(Rails)
-          database_config = "#{Rails.root}/config/yogi.yml"
+        elsif defined?(::Rails)
+          database_config = Rails.root ? "#{Rails.root}/config/yogi.yml" : "config/yogi.yml"
         else
           YogiBerra::Logger.log("No config file specified!", :error)
         end
+
         if database_config
           begin
             File.open(database_config, 'r') do |f|
@@ -64,6 +65,7 @@ module YogiBerra
             retry
           rescue => error
             YogiBerra::Logger.log("Couldn't connect to the mongo database on host: #{host} port: #{port}.\n #{error.inspect}", :error)
+            sleep 1
             retry
           end
 

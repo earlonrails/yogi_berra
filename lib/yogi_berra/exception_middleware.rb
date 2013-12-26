@@ -2,7 +2,6 @@ module YogiBerra
   class ExceptionMiddleware
     def initialize(app)
       @app = app
-      YogiBerra::Catcher.connect(true)
     end
 
     def call(env)

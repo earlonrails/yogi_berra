@@ -23,25 +23,25 @@ def mock_mongo(opts)
   mongo_connection = double('mongo connection')
 
   if opts[:mongo_client_stub]
-    Mongo::MongoClient.should_receive(:new) { mongo_client }
-    mongo_client.should_receive(:[]) { mongo_connection }
+    Mongo::MongoClient.should_receive(:new).at_least(1).times { mongo_client }
+    mongo_client.should_receive(:[]).at_least(1).times { mongo_connection }
   end
 
   if opts[:authenticate_stub] == :error
-    mongo_connection.should_receive(:authenticate).and_raise
+    mongo_connection.should_receive(:authenticate).at_least(1).times.and_raise
   else
-    mongo_connection.should_receive(:authenticate)
+    mongo_connection.should_receive(:authenticate).at_least(1).times
   end
 
   if opts[:connection_stub]
-    mongo_connection.should_receive(:[]) { mongo_connection }
-    mongo_connection.should_receive(:insert)
+    mongo_connection.should_receive(:[]).at_least(1).times { mongo_connection }
+    mongo_connection.should_receive(:insert).at_least(1).times
   end
 end
 
 def mock_yogi_fork_database
   client = YogiBerra::Catcher.fork_database.join
-  YogiBerra::Catcher.should_receive(:fork_database) { client }
+  YogiBerra::Catcher.should_receive(:fork_database).at_least(1).times { client }
 end
 
 def reset_if_rails
