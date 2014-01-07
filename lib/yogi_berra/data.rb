@@ -1,4 +1,5 @@
 require 'mongo'
+require 'keys'
 
 module YogiBerra
   class Data
@@ -11,6 +12,8 @@ module YogiBerra
         data[:controller] = parse_controller(controller) if controller
         data.merge!(environment)
       end
+      # convert all the keys to strings for bson storage, using activesupport keys.rb file
+      data.deep_stringify_keys_and_values!
       YogiBerra::Catcher.connection["caught_exceptions"].insert(data)
     end
 
