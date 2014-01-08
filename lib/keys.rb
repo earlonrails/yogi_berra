@@ -10,6 +10,12 @@ class Hash
 
   def deep_stringify_keys_and_values!
     exceptable_data_types = [Fixnum, Float, String]
-    deep_transform_both!{ |element| element.to_s unless exceptable_data_types.include?(element.class) }
+    deep_transform_both! do |element|
+      if exceptable_data_types.include?(element.class)
+        element
+      else
+        element.to_s
+      end
+    end
   end
 end
