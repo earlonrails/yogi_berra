@@ -16,7 +16,8 @@ describe "Hash Keys" do
           :f => ["one", "two", "three"]
         }
       },
-      "time" => time
+      "time" => time,
+      "warden.user.user.key" => "json/bson can't have periods in the keys"
     }
     hash.deep_stringify_keys_and_values!
     hash.should == {
@@ -31,7 +32,8 @@ describe "Hash Keys" do
           "f" => ["one", "two", "three"]
         }
       },
-      "time" => time
+      "time" => time,
+      "warden-user-user-key" => "json/bson can't have periods in the keys"
     }
     lambda { BSON::BSON_CODER.serialize(hash) }.should_not raise_error
   end

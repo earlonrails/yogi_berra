@@ -3,7 +3,8 @@ class Hash
   def deep_transform_both!(&block)
     keys.each do |key|
       value = delete(key)
-      self[yield(key)] = value.is_a?(Hash) ? value.deep_transform_both!(&block) : yield(value)
+      normalized_key = key.to_s.gsub(/\./, "-")
+      self[normalized_key] = value.is_a?(Hash) ? value.deep_transform_both!(&block) : yield(value)
     end
     self
   end
