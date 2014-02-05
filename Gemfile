@@ -5,6 +5,5 @@ gem "rspec", "~> 2.13.0"
 gem "builder", "~> 3.2.1"
 gem "rake", "~> 10.0.4"
 gem 'coveralls', :require => false
-
-
+gem 'mime-types', '~> 1.17'
 gemspec
