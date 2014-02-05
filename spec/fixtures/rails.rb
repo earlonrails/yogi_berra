@@ -8,5 +8,6 @@ class Rails
     "test"
   end
 end
+YogiBerra.yogi_yml = "#{SPEC_FOLDER}/fixtures/config/yogi.yml"
 
 ENV['RAILS_ENV'] = "test"

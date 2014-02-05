@@ -4,14 +4,14 @@ require 'yogi_berra/notice'
 require 'yogi_berra/exception_middleware'
 require 'yogi_berra/data'
 require 'yogi_berra/logger'
-
-if defined?(::Rails.version) && ::Rails.version.to_f >= 3.0
-  require 'yogi_berra/engine'
-else
-  require 'yogi_berra/rails'
-end
+require 'facets'
+include Facets
 
 module YogiBerra
+  mattr_accessor :ignored_exceptions, :yogi_yml, :settings, :mongo_client, :connection
+  @@ignored_exceptions = %w{ActiveRecord::RecordNotFound AbstractController::ActionNotFound ActionController::RoutingError}
+  @@yogi_yml = "config/yogi.yml"
+
   class << self
     # Stores the notice exception
     # @see YogiBerra.exceptionize
@@ -19,13 +19,21 @@ module YogiBerra
     # @params environment
     # @params opts
     def exceptionize(exception, environment = nil, opts = {})
+      return false if ignored_exception?(exception)
       notice = build_notice_for(exception, opts)
-      if YogiBerra::Catcher.connection
+      if YogiBerra.connection
         YogiBerra::Data.store!(notice, environment)
       end
     end
 
+    def configure
+      yield self
+    end
+
     private
+    def ignored_exception?(exception)
+      @@ignored_exceptions.collect(&:to_s).include?(exception.class.name)
+    end
 
     def build_notice_for(exception, opts = {})
       exception = unwrap_exception(exception)

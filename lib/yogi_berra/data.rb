@@ -14,13 +14,13 @@ module YogiBerra
       end
       # convert all the keys to strings for bson storage, using activesupport keys.rb file
       data.deep_stringify_keys_and_values!
-      YogiBerra::Catcher.connection["caught_exceptions"].insert(data)
+      YogiBerra.connection["caught_exceptions"].insert(data)
     end
 
     def self.parse_exception(notice)
       data_hash = {
         :error_class => "#{notice.exception.class}",
-        :project => YogiBerra::Catcher.settings["project"],
+        :project => YogiBerra.settings["project"],
         :error_message => notice.respond_to?(:error_message) ? notice.error_message : notice.message
       }
       data_hash[:backtraces] = notice.backtrace

@@ -1,4 +1,6 @@
+[![Gem Version](https://badge.fury.io/rb/yogi_berra.png)](http://badge.fury.io/rb/yogi_berra)
 [![Build Status](https://travis-ci.org/earlonrails/yogi_berra.png?branch=master)](https://travis-ci.org/earlonrails/yogi_berra)
+[![Coverage Status](https://coveralls.io/repos/earlonrails/yogi_berra/badge.png)](https://coveralls.io/r/earlonrails/yogi_berra)
 
 Yogi Berra
 ==========
@@ -17,8 +19,8 @@ the buffer will be entered into the database. There can be data loss if the buff
 There are some messages in the logs which will tell you if the connection is down.
 This makes the catcher work when it does and not crash or slow when it doesn't.
 
-Installation
-------------
+Installation With Rails
+-----------------------
 
 add yogi_berra to your Gemfile:
 
@@ -36,6 +38,61 @@ Create a yogi.yml file in rails root config/ folder. Here is a sample:
       database: yogi_berra
       host: localhost
       port: 27017
+
+Rails 3+
+--------
+Generate an initializer
+
+    rails g yogi_berra:install [--resque|--sidekiq]
+
+
+Rails 2.3
+---------
+Create an initializer manually, here is an example:
+
+    require 'yogi_berra/rails'
+
+    # Sidekiq error handling support
+    # require 'yogi_berra/sidekiq'
+
+    # Resque error handling support
+    # require 'resque/failure/multiple'
+    # require 'resque/failure/redis'
+    # require 'yogi_berra/resque'
+
+    # Resque::Failure::Multiple.classes = [Resque::Failure::Redis, YogiBerra::Resque]
+    # Resque::Failure.backend = Resque::Failure::Multiple
+
+    YogiBerra.configure do |config|
+      # Ignore exception types.
+      # ActiveRecord::RecordNotFound, AbstractController::ActionNotFound and ActionController::RoutingError are already added.
+      # config.ignored_exceptions += %w{ActionView::TemplateError CustomError}
+
+      # Mongodb setup
+      # should point to the yogi.yml file which should contain the mongodb configuration settings ie
+      #
+      # defaults: &defaults
+      #   username: yogi
+      #   password: berra
+      #   project: rails_yogi_project
+      #
+      # test:
+      #   <<: *defaults
+      #   database: yogi_berra
+      #   host: localhost
+      #   port: 27017
+      #
+      # Optionally a replica set may be used by replacing host with
+      #
+      # replica_set:
+      #   - host1:27017
+      #   - host2:27017
+      #   - host3:27017
+      #
+
+      config.yogi_yml = "#{Rails.root}/config/yogi.yml"
+    end
+
 
 Without Rails
 -------------
@@ -63,6 +120,7 @@ Thanks
 ------
 
 To :
+
   - Thoughtbot Airbrake:
     https://github.com/airbrake/airbrake/tree/master/lib/airbrake
     This gem is awesome and was the base for most of the code here.

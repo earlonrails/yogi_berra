@@ -6,7 +6,7 @@ module YogiBerra
       if base.method_defined?(:rescue_action_in_public)
         base.send(:alias_method, :rescue_action_in_public_without_yogi, :rescue_action_in_public)
         base.send(:alias_method, :rescue_action_in_public, :rescue_action_in_public_with_yogi)
-        if YogiBerra::Catcher.settings
+        if YogiBerra.settings
           base.send(:alias_method, :rescue_action_locally_without_yogi, :rescue_action_locally)
           base.send(:alias_method, :rescue_action_locally, :rescue_action_locally_with_yogi)
         end

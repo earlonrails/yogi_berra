@@ -11,16 +11,16 @@ describe YogiBerra::Catcher do
 
   it "should load a yaml file without rails" do
     lambda { YogiBerra::Catcher.load_db_settings(@test_yaml) }.should_not raise_error
-    YogiBerra::Catcher.settings.should_not == nil
-    YogiBerra::Catcher.settings["project"].should == "test_yogi_project"
+    YogiBerra.settings.should_not == nil
+    YogiBerra.settings["project"].should == "test_yogi_project"
   end
 
   it "should load a yaml file with rails" do
     ENV["YOGI_ENV"] = nil
     load "#{SPEC_FOLDER}/fixtures/rails.rb"
     lambda { YogiBerra::Catcher.load_db_settings }.should_not raise_error
-    YogiBerra::Catcher.settings.should_not == nil
-    YogiBerra::Catcher.settings["project"].should == "rails_yogi_project"
+    YogiBerra.settings.should_not == nil
+    YogiBerra.settings["project"].should == "rails_yogi_project"
     Object.send(:remove_const, :Rails)
   end
 
@@ -29,7 +29,7 @@ describe YogiBerra::Catcher do
     YogiBerra::Catcher.load_db_settings(@test_yaml)
     mock_yogi_fork_database
     lambda { YogiBerra::Catcher.connect }.should_not raise_error
-    YogiBerra::Catcher.connection.should_not == nil
+    YogiBerra.connection.should_not == nil
   end
 
   it "should grab a connection to mongodb" do
@@ -37,7 +37,7 @@ describe YogiBerra::Catcher do
     YogiBerra::Catcher.load_db_settings(@test_yaml)
     mock_yogi_fork_database
     YogiBerra::Catcher.connect
-    YogiBerra::Catcher.mongo_client.should_not == nil
+    YogiBerra.mongo_client.should_not == nil
   end
 
   it "should grab a connection and authenticate" do

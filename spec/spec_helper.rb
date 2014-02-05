@@ -2,6 +2,9 @@ SPEC_FOLDER = File.dirname(__FILE__)
 require 'yogi_berra'
 require 'rspec/mocks'
 
+require 'coveralls'
+Coveralls.wear!
+
 def build_exception
   raise Exception
 rescue Exception => caught_exception
