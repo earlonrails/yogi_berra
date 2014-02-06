@@ -16,7 +16,7 @@ module YogiBerra
             YogiBerra.settings = yaml_file["#{environment}"] if yaml_file
           end
         rescue
-          YogiBerra::Logger.log("No such file: #{database_config}", :error)
+          YogiBerra::Logger.log("No such file: #{YogiBerra.yogi_yml}", :error)
         end
         YogiBerra.settings
       end

@@ -6,6 +6,8 @@ describe YogiBerra::Catcher do
   end
 
   before(:each) do
+    YogiBerra.settings = nil
+    YogiBerra.yogi_yml = nil
     YogiBerra::Logger.stub(:log)
   end
 
@@ -22,6 +24,12 @@ describe YogiBerra::Catcher do
     YogiBerra.settings.should_not == nil
     YogiBerra.settings["project"].should == "rails_yogi_project"
     Object.send(:remove_const, :Rails)
+  end
+
+  it "should fail gracefully when the yaml file doesn't exist" do
+    YogiBerra::Logger.should_receive(:log).with("No such file: not_a_file.yml", :error)
+    lambda { YogiBerra::Catcher.load_db_settings("not_a_file.yml") }.should_not raise_error
+    YogiBerra.settings.should == nil
   end
 
   it "should try to grab a connection using the settings file" do
