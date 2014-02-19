@@ -12,6 +12,10 @@ module YogiBerra
         data[:controller] = parse_controller(controller) if controller
         data.merge!(environment)
       end
+
+      # capped collections can't grow so need to set dismissed to false
+      # so it can later be switched to true
+      data[:dismissed] = false
       # convert all the keys to strings for bson storage, using activesupport keys.rb file
       data.deep_stringify_keys_and_values!
       YogiBerra.connection["caught_exceptions"].insert(data)
